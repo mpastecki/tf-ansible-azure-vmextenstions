@@ -100,12 +100,13 @@ resource "azurerm_storage_account" "testenvstorageaccount" {
 }
 
 resource "azurerm_virtual_machine" "testenvvm" {
-    count                 = "${var.vmscount}"
-    name                  = "myVM${count.index}"
-    location              = "${var.region}"
-    resource_group_name   = "${azurerm_resource_group.testenvgroup.name}"
-    network_interface_ids = ["${element(azurerm_network_interface.testenvnic.*.id, count.index)}"]
-    vm_size               = "Standard_DS1_v2"
+    count                         = "${var.vmscount}"
+    name                          = "azvm${count.index}"
+    location                      = "${var.region}"
+    resource_group_name           = "${azurerm_resource_group.testenvgroup.name}"
+    network_interface_ids         = ["${element(azurerm_network_interface.testenvnic.*.id, count.index)}"]
+    vm_size                       = "Standard_DS1_v2"
+    delete_os_disk_on_termination = true
 
     storage_os_disk {
         name              = "myOsDisk${count.index}"

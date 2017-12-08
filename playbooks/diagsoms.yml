@@ -1,31 +1,33 @@
-hosts: azure_vmachines
-include_vars: vmsvariables.yml
-become: true
-tasks:
-
+---
+- name: Install diags agents and oms agents
+  hosts: azure_vmachines
+  vars_files: 
+        - vmsvariables.yml
+  become: true
+  tasks:
         - name: Create VM Extension - diags
           azure_rm_virtualmachine_extension:
-            name: {{ inventory_name }}-diags
-            location: {{ region }}
-            resource_group: {{ resource_group}}
-            virtual_machine_name: {{ inventory_name }}
-            publisher: Microsoft.OSTCExtensions
-            virtual_machine_extension_type: LinuxDiagnostic
-            type_handler_version: {{ diags_type_handler_version }}
-            settings: {{ diags_settings }}
-            auto_upgrade_minor_version: true
+            name: "{{ inventory_hostname }}-diags"
+            location: "{{ region }}"
+            resource_group: "{{ resource_group}}"
+            virtual_machine_name: "{{ inventory_hostname }}"
+            publisher: "Microsoft.OSTCExtensions"
+            virtual_machine_extension_type: "LinuxDiagnostic"
+            type_handler_version: "{{ diags_type_handler_version }}"
+            settings: "{{ diags_settings }}"
+            auto_upgrade_minor_version: "true"
 
         - name: Create VM Extension - oms agent
           azure_rm_virtualmachine_extension:
-            name: {{ inventory_name }}-diags
-            location: {{ region }}
-            resource_group: {{ resource_group}}
-            virtual_machine_name: {{ inventory_name }}
-            publisher: Microsoft.EnterpriseCloud.Monitoring
-            virtual_machine_extension_type: OmsAgentForLinux
-            type_handler_version: {{ oms_type_handler_version }}
-            settings: {{ omsagent_settings }}
-            protected_settings: {{ omsagent_protected_settings  }}
-            auto_upgrade_minor_version: {{ oms_agent_for_linux_vm_extn_auto_upgrade_minor_version }}
+            name: "{{ inventory_hostname }}-diags"
+            location: "{{ region }}"
+            resource_group: "{{ resource_group}}"
+            virtual_machine_name: "{{ inventory_hostname }}"
+            publisher: "Microsoft.EnterpriseCloud.Monitoring"
+            virtual_machine_extension_type: "OmsAgentForLinux"
+            type_handler_version: "{{ oms_type_handler_version }}"
+            settings: "{{ omsagent_settings }}"
+            protected_settings: "{{ omsagent_protected_settings  }}"
+            auto_upgrade_minor_version: "{{ oms_agent_for_linux_vm_extn_auto_upgrade_minor_version }}"
 
 

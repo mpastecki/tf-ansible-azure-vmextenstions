@@ -22,7 +22,7 @@ resource "null_resource" "vmsinstall_provisioner" {
 
   provisioner "file" {
     source = "${var.PATH_TO_PRIVATE_KEY}"
-    destination = "/home/ubuntu/.ssh/${var.PRIVATE_KEY_FILE_NAME}"
+    destination = "/home/azureuser/.ssh/${var.PRIVATE_KEY_FILE_NAME}"
   }
 
   provisioner "remote-exec" {
@@ -72,8 +72,11 @@ resource "null_resource" "vmsinstall_provisioner" {
 echo ""
 echo "$(date) => [INFO]  => Install Ansible and dependencies."
 sudo apt-get install software-properties-common -y
-sudo apt-add-repository ppa:ansible/ansible -y
-sudo apt-get update -y && sudo apt-get -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' install python-jmespath ansible -y
+sudo apt-get install python-pip -y
+sudo apt-get install python-setuptools -y
+sudo pip install ansible[azure]
+#sudo apt-add-repository ppa:ansible/ansible -y
+#sudo apt-get update -y && sudo apt-get -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' install python-jmespath ansible -y
 
 # Set Ansible configuration via environment variables
 echo ""
@@ -86,7 +89,7 @@ echo "$(date) => [INFO]  => Perform Ansible run to configure VMs."
 cd /home/azureuser/ansible/playbooks && \
 ansible-playbook  diagsoms.yml \
 --inventory-file=inventories/${var.ansible_inventory_name}/hosts \
---key-file="/home/ubuntu/.ssh/${var.PRIVATE_KEY_FILE_NAME}"
+--key-file="/home/azureuser/.ssh/${var.PRIVATE_KEY_FILE_NAME}"
 EOT
     ]
   }
