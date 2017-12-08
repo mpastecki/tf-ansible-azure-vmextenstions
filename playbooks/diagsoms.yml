@@ -16,6 +16,10 @@
             type_handler_version: "{{ diags_type_handler_version }}"
             settings: "{{ diags_settings }}"
             auto_upgrade_minor_version: "true"
+            client_id: "{{ client_id }}"
+            secret: "{{ secret }}"
+            subscription_id: "{{ subscription_id }}"
+            tenant: "{{ tenant }}"
 
         - name: Create VM Extension - oms agent
           azure_rm_virtualmachine_extension:
@@ -29,5 +33,7 @@
             settings: "{{ omsagent_settings }}"
             protected_settings: "{{ omsagent_protected_settings  }}"
             auto_upgrade_minor_version: "{{ oms_agent_for_linux_vm_extn_auto_upgrade_minor_version }}"
-
-
+            client_id: "{{ client_id }}"
+            secret: "{{ secret }}"
+            subscription_id: "{{ subscription_id }}"
+            tenant: "{{ tenant }}"

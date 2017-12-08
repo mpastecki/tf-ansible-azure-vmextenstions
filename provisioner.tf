@@ -74,9 +74,9 @@ echo "$(date) => [INFO]  => Install Ansible and dependencies."
 sudo apt-get install software-properties-common -y
 sudo apt-get install python-pip -y
 sudo apt-get install python-setuptools -y
+sudo apt-add-repository ppa:ansible/ansible -y
+sudo apt-get update -y && sudo apt-get -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' install python-jmespath ansible -y
 sudo pip install ansible[azure]
-#sudo apt-add-repository ppa:ansible/ansible -y
-#sudo apt-get update -y && sudo apt-get -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' install python-jmespath ansible -y
 
 # Set Ansible configuration via environment variables
 echo ""
@@ -89,7 +89,11 @@ echo "$(date) => [INFO]  => Perform Ansible run to configure VMs."
 cd /home/azureuser/ansible/playbooks && \
 ansible-playbook  diagsoms.yml \
 --inventory-file=inventories/${var.ansible_inventory_name}/hosts \
---key-file="/home/azureuser/.ssh/${var.PRIVATE_KEY_FILE_NAME}"
+--key-file="/home/azureuser/.ssh/${var.PRIVATE_KEY_FILE_NAME}" \
+--extra-vars="client_id=${var.customer_arm_client_id}" \
+--extra-vars="secret=${var.customer_arm_client_secret}" \
+--extra-vars="subscription_id=${var.customer_arm_subscription_id}" \
+--extra-vars="tenant=${var.customer_arm_tenant_id}"
 EOT
     ]
   }
